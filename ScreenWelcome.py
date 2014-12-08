@@ -3,11 +3,11 @@ import kivy
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from kivy.animation import Animation
-from uix.button import Button
-from uix.label import Label
-from uix.anchorlayout import AnchorLayout
-from uix.gridlayout import GridLayout
-from uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
 kivy.require('1.8.0') # replace with your current kivy version !
 class ScreenWelcome(Screen):
     
@@ -22,10 +22,13 @@ class ScreenWelcome(Screen):
         self.gridLayout.add_widget(self.userNameInput)
         self.gridLayout.add_widget(self.chatButton)
         self.chatButton.bind(on_press=self.chatButtonPressed)
+        self.userNameInput.bind(on_text_validate=self.chatButtonPressed)
+        self.userNameInput.focus=True
     
     def chatButtonPressed(self,button):
         userName=self.getUserName()
         App.get_running_app().sm.current = "chat"
+        App.get_running_app().username=userName
         
     def getUserName(self):
         if self.userNameInput.text!=None:
