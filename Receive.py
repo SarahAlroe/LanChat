@@ -1,3 +1,4 @@
+# -*- coding: Utf-8 -*-
 import json
 import random
 import select
@@ -5,6 +6,7 @@ import threading
 import time
 import sys
 import traceback
+import sys
 class Receive (threading.Thread):
     def __init__(self,sock,client):
         #Init threading:
@@ -38,15 +40,14 @@ class Receive (threading.Thread):
                 sender=rec[1]
                 
                 #Turn Json to Dict:
-                out = json.loads(jout)
+                out = json.loads(jout, "utf-8")
                 print "New rec, type: "+out["type"]
 
                 print "Finding action"
                 #What does this message contain?
                     #If it's a confirmation that a message has been received
                 if out["type"] == "msg":
-                    print "Recieved new message from "+out["username"]+": "
-                    print out["msg"]
+                    print "Recieved new message from "+out["username"]+"!"
                     self.ap.sm.get_screen("chat").chatDisplay.text += "\n"+out["username"]+": "+out["msg"]
                 
                 #elif out["type"] == "msg":

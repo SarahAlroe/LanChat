@@ -1,3 +1,4 @@
+# -*- coding: Utf-8 -*-
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager
@@ -28,13 +29,18 @@ class SoundMemoryGameApp(App):
 
     def initializeConnection(self):
         # set sock
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if self.broadCastMode:
+            self.sock = socket(AF_INET, SOCK_DGRAM)
+            self.sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+        else:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("", self.port))
         self.sock.setblocking(0)
         self.sock.settimeout(20)
 
     #Called automatically when app is started
     def on_start(self):
+        self.broadCastMode=True
         reload(sys)
         sys.setdefaultencoding('utf-8')
         #show the first screen:
@@ -56,12 +62,17 @@ class SoundMemoryGameApp(App):
         data = {'type':"msg", 'username':self.username, 'msg':message}
         jdata = json.dumps(data, ensure_ascii=False)
         print"Sending message!"
-        for ip in self.contacts:
-            self.send(jdata, ip)
+        if self.broadCastMode:
+            self.broadcast(jdata)
+        else:
+            for ip in self.contacts:
+                self.send(jdata, ip)
 
     def send(self, data, reciever):
         self.sock.sendto(data,(reciever,self.port))
 
+    def broadcast(self, data):
+        self.sock.sendto(data, ('<broadcast>', self.port))
     ''' 
     Navigate the user back to the welcome screen
     '''       

@@ -1,3 +1,4 @@
+# -*- coding: Utf-8 -*-
 from kivy.uix.screenmanager import Screen, SlideTransition
 import kivy
 from kivy.app import App
