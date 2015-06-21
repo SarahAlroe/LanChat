@@ -30,8 +30,8 @@ class SoundMemoryGameApp(App):
     def initializeConnection(self):
         # set sock
         if self.broadCastMode:
-            self.sock = socket(AF_INET, SOCK_DGRAM)
-            self.sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         else:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("", self.port))
